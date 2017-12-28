@@ -4,7 +4,9 @@ import android.content.Context
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ViewAnimator
 import com.qwert2603.andr_lib.R
 import com.qwert2603.andr_lib.util.showIfNotYet
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
@@ -69,4 +71,7 @@ class LRPanelImpl @JvmOverloads constructor(context: Context, attrs: AttributeSe
         if (this.isRefreshing != vs.lrModel.refreshing) this.isRefreshing = vs.lrModel.refreshing
         if (this.isEnabled != vs.lrModel.canRefresh) this.isEnabled = vs.lrModel.canRefresh
     }
+
+    protected val _LR_ViewAnimator: ViewAnimator get() = LR_ViewAnimator
+    protected val _LR_Retry_Button: Button get() = LR_Retry_Button
 }
