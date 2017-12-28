@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.TextView
 import com.qwert2603.andr_lib.base.mvi.BasePresenter
 import com.qwert2603.andr_lib.base.mvi.load_refresh.LRFragment
 import com.qwert2603.andr_lib.base.recyclerview.BaseRecyclerViewAdapter
@@ -81,4 +82,5 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
     }
 
     protected val _list_RecyclerView: RecyclerView get() = list_RecyclerView
+    protected val _listEmpty_TextView: TextView get() = listEmpty_TextView
 }
