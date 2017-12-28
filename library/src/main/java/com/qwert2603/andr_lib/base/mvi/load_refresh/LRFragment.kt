@@ -37,7 +37,8 @@ abstract class LRFragment<VS : LRViewState, V : LRView<VS>, P : BasePresenter<V,
             when (va) {
                 is LRViewAction.RefreshingError -> {
                     LogUtils.e("refreshError", va.t)
-                    Snackbar.make(viewForSnackbar(), R.string.refreshing_error_text, Snackbar.LENGTH_SHORT)
+                    val viewForSnackbar = viewForSnackbar() ?: return
+                    Snackbar.make(viewForSnackbar, R.string.refreshing_error_text, Snackbar.LENGTH_SHORT)
                             .setAction(R.string.retry_loading_text, { retryRefreshSubject.onNext(Any()) })
                             .show()
                 }
