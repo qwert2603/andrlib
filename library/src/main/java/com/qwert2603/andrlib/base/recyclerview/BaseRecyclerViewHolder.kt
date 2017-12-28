@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.qwert2603.andrlib.model.IdentifiableLong
 import com.qwert2603.andrlib.util.inflate
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 abstract class BaseRecyclerViewHolder<M : IdentifiableLong>(parent: ViewGroup, @LayoutRes layoutRes: Int)
     : RecyclerView.ViewHolder(parent.inflate(layoutRes)) {
@@ -14,6 +16,8 @@ abstract class BaseRecyclerViewHolder<M : IdentifiableLong>(parent: ViewGroup, @
     var adapter: BaseRecyclerViewAdapter<M>? = null
 
     var m: M? = null
+
+    private val viewDisposable = CompositeDisposable()
 
     init {
         itemView.setOnClickListener {
@@ -48,6 +52,11 @@ abstract class BaseRecyclerViewHolder<M : IdentifiableLong>(parent: ViewGroup, @
 
     @CallSuper
     open fun onRecycled() {
+        viewDisposable.clear()
         m = null
+    }
+
+    protected fun Disposable.disposeOnRecycled() {
+        viewDisposable.add(this)
     }
 }
