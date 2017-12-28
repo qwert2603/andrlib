@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_text">Ошибка</string>
+    <string name="loading_error_text">Ошибка загрузки</string>
+    <string name="refreshing_error_text">Ошибка обновления</string>
+    <string name="retry_loading_text">Повторить загрузку</string>
+    <string name="empty_list_text">Список пуст</string>
+    <string name="list_loaded_completely">Список загружен полностью</string>
+</resources>
