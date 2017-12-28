@@ -7,7 +7,7 @@ import com.hannesdorfmann.mosby3.mvi.MviFragment
 
 abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>> : MviFragment<V, P>(), BaseView<VS> {
 
-    abstract fun viewForSnackbar(): View
+    abstract fun viewForSnackbar(): View?
 
     private var everRendered = false
     protected var prevViewState: VS? = null
