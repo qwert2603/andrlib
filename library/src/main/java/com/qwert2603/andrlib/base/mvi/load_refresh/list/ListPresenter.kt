@@ -9,8 +9,6 @@ import com.qwert2603.andrlib.schedulers.UiSchedulerProvider
 import com.qwert2603.andrlib.util.cancelOn
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 
 /** Presenter that loads list of items and allows pagination. */
 abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : IdentifiableLong>(uiSchedulerProvider: UiSchedulerProvider)
@@ -34,17 +32,12 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
 
     protected fun paginationChanges(): Observable<PartialChange> = loadNextPageIntent
             .switchMap {
-                /**
-                 * Add [.subscribeWith(PublishSubject.create<Any>())] because [reloadIntent] may be [BehaviorSubject]
-                 * and emit item immediately that triggers cancelling.
-                 * We need to cancel ONLY if item is emitted while loading next page.
-                 */
                 nextPageSingle()
                         .toObservable()
                         .map<PartialChange> { ListPartialChange.NextPageLoaded(it) }
                         .onErrorReturn { ListPartialChange.NextPageError(it) }
                         .startWith(ListPartialChange.NextPageLoading())
-                        .cancelOn(Observable.merge(reloadIntent, retryIntent, refreshIntent).subscribeWith(PublishSubject.create<Any>()), ListPartialChange.NextPageCancelled())
+                        .cancelOn(Observable.merge(reloadIntent, retryIntent, refreshIntent), ListPartialChange.NextPageCancelled())
             }
 
     @Suppress("UNCHECKED_CAST")

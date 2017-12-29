@@ -9,8 +9,6 @@ import com.qwert2603.andrlib.util.cancelOn
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 
 /** Presenter that can load (retry load) and refresh initial model. */
 abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerProvider: UiSchedulerProvider)
@@ -85,11 +83,6 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
             refreshIntent
                     .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
                     .switchMap {
-                        /**
-                         * Add [.subscribeWith(PublishSubject.create<Any>())] because [reloadIntent] may be [BehaviorSubject]
-                         * and emit item immediately that triggers cancelling.
-                         * We need to cancel ONLY if item is emitted while refreshing.
-                         */
                         initialModelSingle(it)
                                 .toObservable()
                                 .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
@@ -98,7 +91,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
                                     LRPartialChange.RefreshError(it)
                                 }
                                 .startWith(LRPartialChange.RefreshStarted())
-                                .cancelOn(Observable.merge(reloadIntent, retryIntent).subscribeWith(PublishSubject.create<Any>()), LRPartialChange.RefreshCancelled())
+                                .cancelOn(Observable.merge(reloadIntent, retryIntent), LRPartialChange.RefreshCancelled())
                     }
     )
 
