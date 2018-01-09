@@ -23,7 +23,7 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
     protected abstract fun VS.changeListModel(listModel: ListModel): VS
 
     /** @return new view state with added items page. */
-    protected abstract fun VS.addNextPage(nextPage: List<T>? = null): VS
+    protected abstract fun VS.addNextPage(nextPage: List<T>): VS
 
     /** Load next page after previous page was loaded or retry loading page. */
     protected val loadNextPageIntent: Observable<Any> = intent { it.loadNextPage() }.share()
