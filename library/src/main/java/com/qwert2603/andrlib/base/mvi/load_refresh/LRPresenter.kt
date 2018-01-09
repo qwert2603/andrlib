@@ -23,7 +23,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
     protected abstract fun initialModelSingle(additionalKey: A): Single<I>
 
     /** @return new view state with changed [LRModel]. */
-    protected abstract fun VS.changeLRModel(lrModel: LRModel): VS
+//    protected abstract fun VS.changeLRModel(lrModel: LRModel): VS//todo:remove
 
     /**
      * @param i initial model from [LRPartialChange.InitialModelLoaded].
