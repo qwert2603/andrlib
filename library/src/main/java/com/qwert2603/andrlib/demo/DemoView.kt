@@ -1,5 +1,5 @@
 package com.qwert2603.andrlib.demo
 
-import com.qwert2603.andrlib.base.mvi.load_refresh.LRView
+import com.qwert2603.andrlib.base.mvi.load_refresh.list.ListView
 
-interface DemoView : LRView<DemoViewState>
+interface DemoView : ListView<DemoViewState>

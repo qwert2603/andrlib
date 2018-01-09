@@ -20,7 +20,7 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
     }
 
     /** @return new view state with changed [ListModel]. */
-    protected abstract fun VS.changeListModel(listModel: ListModel): VS
+//    protected abstract fun VS.changeListModel(listModel: ListModel): VS
 
     /** @return new view state with added items page. */
     protected abstract fun VS.addNextPage(nextPage: List<T>): VS
