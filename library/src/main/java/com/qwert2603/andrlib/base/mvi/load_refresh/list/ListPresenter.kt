@@ -19,11 +19,11 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
         val EMPTY_LIST_MODEL_SINGLE_PAGE = EMPTY_LIST_MODEL.copy(allItemsLoaded = true)
     }
 
-    /**
-     * @param nextPage items page from loaded next page.
-     * @return new view state with changed [ListModel].
-     */
-    protected abstract fun VS.changeListModel(listModel: ListModel, nextPage: List<T>? = null): VS
+    /** @return new view state with changed [ListModel]. */
+    protected abstract fun VS.changeListModel(listModel: ListModel): VS
+
+    /** @return new view state with added items page. */
+    protected abstract fun VS.addNextPage(nextPage: List<T>? = null): VS
 
     /** Load next page after previous page was loaded or retry loading page. */
     protected val loadNextPageIntent: Observable<Any> = intent { it.loadNextPage() }.share()
@@ -72,7 +72,7 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
                     nextPageLoading = false,
                     nextPageError = null,
                     allItemsLoaded = change.page.allItemsLoaded
-            ), nextPage = change.page.list as List<T>)
+            )).addNextPage(change.page.list as List<T>)
         }
     }
 }
