@@ -19,9 +19,6 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
         val EMPTY_LIST_MODEL_SINGLE_PAGE = EMPTY_LIST_MODEL.copy(allItemsLoaded = true)
     }
 
-    /** @return new view state with changed [ListModel]. */
-//    protected abstract fun VS.changeListModel(listModel: ListModel): VS
-
     /** @return new view state with added items page. */
     protected abstract fun VS.addNextPage(nextPage: List<T>): VS
 
