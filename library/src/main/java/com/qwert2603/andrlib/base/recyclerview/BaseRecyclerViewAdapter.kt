@@ -5,7 +5,10 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.qwert2603.andrlib.R
-import com.qwert2603.andrlib.base.recyclerview.page_list_item.*
+import com.qwert2603.andrlib.base.recyclerview.page_list_item.AllItemsLoaded
+import com.qwert2603.andrlib.base.recyclerview.page_list_item.NextPageError
+import com.qwert2603.andrlib.base.recyclerview.page_list_item.NextPageLoading
+import com.qwert2603.andrlib.base.recyclerview.page_list_item.PageListItem
 import com.qwert2603.andrlib.base.recyclerview.vh.AllItemsLoadedViewHolder
 import com.qwert2603.andrlib.base.recyclerview.vh.NextPageErrorViewHolder
 import com.qwert2603.andrlib.base.recyclerview.vh.NextPageLoadingViewHolder
@@ -32,6 +35,8 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
         const val VIEW_TYPE_ALL_ITEMS_LOADED = -3
     }
 
+    var useDiffUtils = true
+
     var recyclerView: RecyclerView? = null
 
     data class AdapterList<out M : IdentifiableLong>(
@@ -54,12 +59,16 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
             val old = field
             field = value
 
-            DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun getOldListSize() = old.size
-                override fun getNewListSize() = field.size
-                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition].id == field[newItemPosition].id
-                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition] == field[newItemPosition]
-            }).dispatchUpdatesTo(this)
+            if (useDiffUtils) {
+                DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                    override fun getOldListSize() = old.size
+                    override fun getNewListSize() = field.size
+                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition].id == field[newItemPosition].id
+                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition] == field[newItemPosition]
+                }).dispatchUpdatesTo(this)
+            } else {
+                notifyDataSetChanged()
+            }
         }
 
     var modelItemClicks: PublishSubject<M> = PublishSubject.create()
