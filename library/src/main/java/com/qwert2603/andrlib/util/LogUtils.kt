@@ -7,11 +7,11 @@ object LogUtils {
     private const val APP_TAG = "AASSDD"
     private const val ERROR_MSG = "ERROR!!!"
 
-    private enum class LogType {
+    enum class LogType {
         NONE, ANDROID, SOUT
     }
 
-    private val logType = LogType.ANDROID
+    var logType = LogType.ANDROID
 
     fun d(msg: String) {
         d(APP_TAG, msg)
