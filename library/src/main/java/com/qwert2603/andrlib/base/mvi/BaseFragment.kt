@@ -4,6 +4,7 @@ import android.support.annotation.CallSuper
 import android.view.View
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.qwert2603.andrlib.util.LogUtils
+import com.qwert2603.andrlib.util.Quadruple
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -67,6 +68,20 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         }
         val prevField = fields(prevViewState)
         if (currentField.first !== prevField.first || currentField.second !== prevField.second || currentField.third !== prevField.third) {
+            renderer(currentField)
+        }
+    }
+
+    protected fun <T, U, V, W> renderIfChangedFour(fields: VS.() -> Quadruple<T, U, V, W>, renderer: (Quadruple<T, U, V, W>) -> Unit) {
+        val prevViewState = prevViewState
+        val currentField = fields(currentViewState)
+        if (prevViewState == null) {
+            renderer(currentField)
+            return
+        }
+        val prevField = fields(prevViewState)
+        if (currentField.first !== prevField.first || currentField.second !== prevField.second
+                || currentField.third !== prevField.third || currentField.forth !== prevField.forth) {
             renderer(currentField)
         }
     }
