@@ -38,7 +38,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         viewDisposable.add(this)
     }
 
-    protected fun <T> renderIfChanged(field: VS.() -> T, renderer: (T) -> Unit) {
+    protected inline fun <reified T> renderIfChanged(crossinline field: VS.() -> T, crossinline renderer: (T) -> Unit) {
         val prevViewState = prevViewState
         val currentField = field(currentViewState)
         if (prevViewState == null || currentField !== field(prevViewState)) {

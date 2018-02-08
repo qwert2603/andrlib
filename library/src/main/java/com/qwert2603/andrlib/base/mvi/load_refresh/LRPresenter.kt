@@ -47,15 +47,17 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
     open protected val refreshIntent: Observable<Any> = intent { it.refresh() }.share()
 
     /** @return Observable that emits every time when loading initial model. */
-    protected fun initialModelLoading(): Observable<Any> = Observable.merge(
-            Observable.combineLatest(
-                    loadIntent,
-                    reloadIntent.startWith(Any()),
-                    BiFunction { a, _ -> a }
-            ),
-            retryIntent,
-            refreshIntent
-    )
+    protected val initialModelLoading: Observable<Any> by lazy {
+        Observable.merge(
+                Observable.combineLatest(
+                        loadIntent,
+                        reloadIntent.startWith(Any()),
+                        BiFunction { a, _ -> a }
+                ),
+                retryIntent,
+                refreshIntent
+        ).share()
+    }
 
     /** [additionalKey] additional key that can be used for loading initial model. */
     @Suppress("UNCHECKED_CAST")
