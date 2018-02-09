@@ -49,6 +49,12 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         viewDisposable.add(this)
     }
 
+    protected fun renderAll() {
+        everRendered = false
+        prevViewState = null
+        render(currentViewState)
+    }
+
     protected inline fun <reified T> renderIfChanged(crossinline field: VS.() -> T, crossinline renderer: (T) -> Unit) {
         val prevViewState = prevViewState
         val currentField = field(currentViewState)
