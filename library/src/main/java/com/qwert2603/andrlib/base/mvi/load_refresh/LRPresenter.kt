@@ -1,6 +1,5 @@
 package com.qwert2603.andrlib.base.mvi.load_refresh
 
-import android.support.annotation.CallSuper
 import com.qwert2603.andrlib.base.mvi.BasePresenter
 import com.qwert2603.andrlib.base.mvi.PartialChange
 import com.qwert2603.andrlib.schedulers.UiSchedulerProvider
@@ -94,7 +93,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
                     }
     )
 
-    @CallSuper
+    //    @CallSuper
     override fun stateReducer(vs: VS, change: PartialChange): VS {
         LogUtils.d("LRPresenter ${this.javaClass.simpleName} stateReducer ${change.toString().replace('\n', ' ')}")
         if (change !is LRPartialChange) throw Exception()

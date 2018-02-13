@@ -1,6 +1,5 @@
 package com.qwert2603.andrlib.base.mvi.load_refresh
 
-import android.support.annotation.CallSuper
 import android.support.design.widget.Snackbar
 import com.qwert2603.andrlib.R
 import com.qwert2603.andrlib.base.mvi.BaseFragment
@@ -25,13 +24,15 @@ abstract class LRFragment<VS : LRViewState, V : LRView<VS>, P : BasePresenter<V,
             retryRefreshSubject
     )
 
-    @CallSuper override fun render(vs: VS) {
+    //    @CallSuper
+    override fun render(vs: VS) {
         super.render(vs)
         vs.lrModel.loadingError?.let { LogUtils.e("loadingError", it) }
         loadRefreshPanel().render(vs)
     }
 
-    @CallSuper override fun executeAction(va: ViewAction) {
+    //    @CallSuper
+    override fun executeAction(va: ViewAction) {
         LogUtils.d("${this.javaClass.simpleName} executeAction $va")
         if (va is LRViewAction) {
             when (va) {

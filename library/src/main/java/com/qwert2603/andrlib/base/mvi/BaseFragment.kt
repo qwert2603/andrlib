@@ -1,7 +1,6 @@
 package com.qwert2603.andrlib.base.mvi
 
 import android.os.Bundle
-import android.support.annotation.CallSuper
 import android.view.View
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.qwert2603.andrlib.util.LogUtils
@@ -34,7 +33,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         super.onDestroyView()
     }
 
-    @CallSuper
+    //    @CallSuper
     override fun render(vs: VS) {
         if (everRendered) {
             prevViewState = currentViewState
@@ -55,7 +54,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         render(currentViewState)
     }
 
-    protected inline fun <reified T> renderIfChanged(crossinline field: VS.() -> T, crossinline renderer: (T) -> Unit) {
+    protected fun <T> renderIfChanged(field: VS.() -> T, renderer: (T) -> Unit) {
         val prevViewState = prevViewState
         val currentField = field(currentViewState)
         if (prevViewState == null || currentField !== field(prevViewState)) {

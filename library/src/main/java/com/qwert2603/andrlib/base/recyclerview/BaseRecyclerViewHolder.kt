@@ -1,6 +1,5 @@
 package com.qwert2603.andrlib.base.recyclerview
 
-import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -45,12 +44,12 @@ abstract class BaseRecyclerViewHolder<M : IdentifiableLong>(parent: ViewGroup, @
         })
     }
 
-    @CallSuper
+    //    @CallSuper
     open fun bind(m: M) {
         this.m = m
     }
 
-    @CallSuper
+    //    @CallSuper
     open fun onRecycled() {
         viewDisposable.clear()
         m = null

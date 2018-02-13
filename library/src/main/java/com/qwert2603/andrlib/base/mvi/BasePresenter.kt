@@ -1,6 +1,5 @@
 package com.qwert2603.andrlib.base.mvi
 
-import android.support.annotation.CallSuper
 import com.qwert2603.andrlib.schedulers.UiSchedulerProvider
 import com.qwert2603.andrlib.schedulers.switchToUiIfNotYet
 import com.qwert2603.andrlib.util.LogUtils
@@ -60,11 +59,11 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
             .subscribe()
             .addTo(disposableView)
 
-    abstract protected val partialChanges: Observable<PartialChange>
-    abstract protected val initialState: VS
-    abstract protected fun stateReducer(vs: VS, change: PartialChange): VS
+    protected abstract val partialChanges: Observable<PartialChange>
+    protected abstract val initialState: VS
+    protected abstract fun stateReducer(vs: VS, change: PartialChange): VS
 
-    @CallSuper
+    //    @CallSuper
     override fun bindIntents() {
         subscribeViewState(
                 partialChanges
