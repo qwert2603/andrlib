@@ -16,10 +16,8 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
     private var everRendered = false
 
     protected var prevViewState: VS? = null
-//     todo   private set
 
     protected lateinit var currentViewState: VS
-//     todo   private set
 
     private val viewDisposable = CompositeDisposable()
 
