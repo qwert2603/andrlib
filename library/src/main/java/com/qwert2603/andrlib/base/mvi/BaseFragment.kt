@@ -1,6 +1,7 @@
 package com.qwert2603.andrlib.base.mvi
 
 import android.os.Bundle
+import android.support.annotation.CallSuper
 import android.view.View
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.qwert2603.andrlib.util.LogUtils
@@ -15,10 +16,10 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
     private var everRendered = false
 
     protected var prevViewState: VS? = null
-        private set
+//     todo   private set
 
     protected lateinit var currentViewState: VS
-        private set
+//     todo   private set
 
     private val viewDisposable = CompositeDisposable()
 
@@ -33,7 +34,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         super.onDestroyView()
     }
 
-    //    @CallSuper
+    @CallSuper
     override fun render(vs: VS) {
         if (everRendered) {
             prevViewState = currentViewState
