@@ -20,9 +20,13 @@ class BasePresenterTest {
     @Test
     fun testViewActions() {
         val presenter = JustBasePresenter(ImmediateSchedulersProvider())
+
+        presenter.sendAction(TestAction.Action_1(26))
+        Mockito.verifyZeroInteractions(view)
+
         presenter.attachView(view)
 
-        Mockito.verifyZeroInteractions(view)
+        Mockito.verify(view).executeAction(TestAction.Action_1(26))
 
         val action_2 = TestAction.Action_2()
 

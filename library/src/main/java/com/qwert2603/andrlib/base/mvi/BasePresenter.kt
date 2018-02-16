@@ -23,7 +23,7 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
             .pausable(viewAttached)
     private val actionsObservable: PublishSubject<ViewAction> = PublishSubject.create<ViewAction>()
 
-    private var relayDisposable: Disposable? = null
+    private var relayDisposable: Disposable = actionsRelay.subscribe { actionsObservable.onNext(it) }
     private val actionsDisposable = CompositeDisposable()
 
     private val disposableView = CompositeDisposable()
@@ -35,9 +35,6 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
                 .switchToUiIfNotYet(uiSchedulerProvider)
                 .subscribe(view::executeAction)
                 .addTo(actionsDisposable)
-        if (relayDisposable == null) {
-            relayDisposable = actionsRelay.subscribe { actionsObservable.onNext(it) }
-        }
         viewAttached.onNext(true)
     }
 
@@ -51,7 +48,7 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
     override fun destroy() {
         LogUtils.d("BasePresenter#destroy ${hashCode()} $javaClass")
         actionsDisposable.dispose()
-        relayDisposable?.dispose()
+        relayDisposable.dispose()
         disposableView.dispose()
         super.destroy()
     }
