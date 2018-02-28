@@ -23,12 +23,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    ext.support_version = '27.0.2'
-    ext.rxbinding_version = '2.0.0'
+    ext.support_version = '27.1.0'
     ext.mosby_version = '3.1.0'
-    ext.rxjava_version = '2.1.9'
-    ext.rxandroid_version = '2.0.1'
-    ext.rxbinding_version = '2.0.0'
+    ext.rxjava_version = '2.1.10'
+    ext.rxandroid_version = '2.0.2'
+    ext.rxbinding_version = '2.1.1'
 
     ext.junit_version = '4.12'
     ext.mockito_version = '2.8.47'

@@ -78,18 +78,19 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
     var pageIndicatorLongClicks: PublishSubject<PageListItem> = PublishSubject.create()
     var pageIndicatorErrorRetryClicks: PublishSubject<Any> = PublishSubject.create()
 
-    @PluralsRes open protected val pluralsRes = R.plurals.items
+    @PluralsRes
+    protected open val pluralsRes = R.plurals.items
 
     init {
         setHasStableIds(true)
     }
 
-    override final fun setHasStableIds(hasStableIds: Boolean) {
+    final override fun setHasStableIds(hasStableIds: Boolean) {
         if (hasStableIds == this.hasStableIds()) return
         super.setHasStableIds(hasStableIds)
     }
 
-    override final fun getItemViewType(position: Int) = when (adapterList[position]) {
+    final override fun getItemViewType(position: Int) = when (adapterList[position]) {
         is NextPageLoading -> VIEW_TYPE_NEXT_PAGE_LOADING
         is NextPageError -> VIEW_TYPE_NEXT_PAGE_ERROR
         is AllItemsLoaded -> VIEW_TYPE_ALL_ITEMS_LOADED
@@ -97,7 +98,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
     }
 
     @Suppress("UNCHECKED_CAST")
-    override final fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseRecyclerViewHolder<IdentifiableLong> = when (viewType) {
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseRecyclerViewHolder<IdentifiableLong> = when (viewType) {
         VIEW_TYPE_NEXT_PAGE_LOADING -> NextPageLoadingViewHolder(parent)
         VIEW_TYPE_NEXT_PAGE_ERROR -> NextPageErrorViewHolder(parent)
         VIEW_TYPE_ALL_ITEMS_LOADED -> AllItemsLoadedViewHolder(parent, pluralsRes)
@@ -105,7 +106,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
     } as BaseRecyclerViewHolder<IdentifiableLong>
 
     @Suppress("UNCHECKED_CAST")
-    override final fun onBindViewHolder(holder: BaseRecyclerViewHolder<IdentifiableLong>, position: Int) {
+    final override fun onBindViewHolder(holder: BaseRecyclerViewHolder<IdentifiableLong>, position: Int) {
         holder.adapter = this as BaseRecyclerViewAdapter<IdentifiableLong>
         if (position < adapterList.modelList.size) {
             onBindViewHolderModel(holder, position)
@@ -128,12 +129,12 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
         super.onViewRecycled(holder)
     }
 
-    override fun onFailedToRecycleView(holder: BaseRecyclerViewHolder<IdentifiableLong>?): Boolean {
+    override fun onFailedToRecycleView(holder: BaseRecyclerViewHolder<IdentifiableLong>): Boolean {
         LogUtils.e("BaseRecyclerViewAdapter onFailedToRecycleView $holder")
         return super.onFailedToRecycleView(holder)
     }
 
-    override final fun getItemCount() = adapterList.size
+    final override fun getItemCount() = adapterList.size
 
-    override final fun getItemId(position: Int) = adapterList[position].id
+    final override fun getItemId(position: Int) = adapterList[position].id
 }

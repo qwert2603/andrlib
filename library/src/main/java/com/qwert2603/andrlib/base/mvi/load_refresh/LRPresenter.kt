@@ -18,7 +18,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
         val EMPTY_LR_MODEL = LRModel(false, null, false, false, null)
     }
 
-    open protected val canRefreshAtAll = true
+    protected open val canRefreshAtAll = true
 
     protected abstract fun initialModelSingle(additionalKey: A): Single<I>
 
@@ -32,7 +32,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
      * Classes-inheritors may override it to trigger reload intent when needed.
      * Reload means that initial model will be reloaded.
      */
-    open protected val reloadIntent: Observable<Any> = Observable.never()
+    protected open val reloadIntent: Observable<Any> = Observable.never()
 
     /** Load initial model. */
     protected val loadIntent: Observable<Any> = intent { it.load() }.share()
