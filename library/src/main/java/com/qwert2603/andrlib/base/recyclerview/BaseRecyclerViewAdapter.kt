@@ -55,7 +55,6 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
 
     var adapterList: AdapterList<M> = AdapterList(emptyList(), null)
         set(value) {
-            if (value == field) return
             val old = field
             field = value
 
