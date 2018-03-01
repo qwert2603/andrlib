@@ -23,9 +23,9 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
         private const val LAYER_LIST = 2
     }
 
-    abstract protected val adapter: BaseRecyclerViewAdapter<T>
+    protected abstract val adapter: BaseRecyclerViewAdapter<T>
 
-    open protected fun createLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(context)
+    protected open fun createLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(context)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
