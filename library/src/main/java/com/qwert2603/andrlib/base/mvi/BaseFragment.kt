@@ -100,4 +100,12 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
             renderer(currentField)
         }
     }
+
+    protected fun <T> renderIfChangedWithFirstRendering(field: VS.() -> T, renderer: (T, isFirstRendering: Boolean) -> Unit) {
+        val prevViewState = prevViewState
+        val currentField = field(currentViewState)
+        if (prevViewState == null || currentField !== field(prevViewState)) {
+            renderer(currentField, prevViewState == null)
+        }
+    }
 }
