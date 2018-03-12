@@ -8,7 +8,11 @@ object LogUtils {
     private const val ERROR_MSG = "ERROR!!!"
 
     enum class LogType {
-        NONE, ANDROID, SOUT
+        NONE,
+        ANDROID,
+        ANDROID_ERRORS,
+        SOUT,
+        SOUT_ERRORS
     }
 
     var logType = LogType.ANDROID
@@ -21,7 +25,9 @@ object LogUtils {
         when (logType) {
             LogUtils.LogType.NONE -> nth()
             LogUtils.LogType.ANDROID -> Log.d(tag, msg)
+            LogUtils.LogType.ANDROID_ERRORS -> nth()
             LogUtils.LogType.SOUT -> println("$tag $msg")
+            LogUtils.LogType.SOUT_ERRORS -> nth()
         }
     }
 
@@ -30,7 +36,9 @@ object LogUtils {
         when (logType) {
             LogUtils.LogType.NONE -> nth()
             LogUtils.LogType.ANDROID -> Log.e(APP_TAG, "$msg $t", t)
+            LogUtils.LogType.ANDROID_ERRORS -> Log.e(APP_TAG, "$msg $t", t)
             LogUtils.LogType.SOUT -> println("$APP_TAG $msg $t\n${t?.printStackTrace()}")
+            LogUtils.LogType.SOUT_ERRORS -> println("$APP_TAG $msg $t\n${t?.printStackTrace()}")
         }
     }
 
@@ -38,7 +46,9 @@ object LogUtils {
         when (logType) {
             LogUtils.LogType.NONE -> nth()
             LogUtils.LogType.ANDROID -> Log.e(tag, "$msg $t", t)
+            LogUtils.LogType.ANDROID_ERRORS -> Log.e(tag, "$msg $t", t)
             LogUtils.LogType.SOUT -> println("$APP_TAG $msg $t\n${t.printStackTrace()}")
+            LogUtils.LogType.SOUT_ERRORS -> println("$APP_TAG $msg $t\n${t.printStackTrace()}")
         }
     }
 
@@ -46,7 +56,9 @@ object LogUtils {
         when (logType) {
             LogUtils.LogType.NONE -> nth()
             LogUtils.LogType.ANDROID -> Log.v(APP_TAG, "", Exception())
+            LogUtils.LogType.ANDROID_ERRORS -> nth()
             LogUtils.LogType.SOUT -> println("$APP_TAG, ${Exception().printStackTrace()}")
+            LogUtils.LogType.SOUT_ERRORS -> nth()
         }
     }
 

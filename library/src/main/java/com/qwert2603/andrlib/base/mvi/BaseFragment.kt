@@ -53,7 +53,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         render(currentViewState)
     }
 
-    protected fun <T> renderIfChanged(field: VS.() -> T, renderer: (T) -> Unit) {
+    protected inline fun <T> renderIfChanged(crossinline field: VS.() -> T, crossinline renderer: (T) -> Unit) {
         val prevViewState = prevViewState
         val currentField = field(currentViewState)
         if (prevViewState == null || currentField !== field(prevViewState)) {
@@ -61,7 +61,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         }
     }
 
-    protected fun <T, U> renderIfChangedTwo(fields: VS.() -> Pair<T, U>, renderer: (Pair<T, U>) -> Unit) {
+    protected inline fun <T, U> renderIfChangedTwo(crossinline fields: VS.() -> Pair<T, U>, crossinline renderer: (Pair<T, U>) -> Unit) {
         val prevViewState = prevViewState
         val currentField = fields(currentViewState)
         if (prevViewState == null) {
@@ -74,7 +74,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         }
     }
 
-    protected fun <T, U, V> renderIfChangedThree(fields: VS.() -> Triple<T, U, V>, renderer: (Triple<T, U, V>) -> Unit) {
+    protected inline fun <T, U, V> renderIfChangedThree(crossinline fields: VS.() -> Triple<T, U, V>, crossinline renderer: (Triple<T, U, V>) -> Unit) {
         val prevViewState = prevViewState
         val currentField = fields(currentViewState)
         if (prevViewState == null) {
@@ -87,7 +87,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         }
     }
 
-    protected fun <T, U, V, W> renderIfChangedFour(fields: VS.() -> Quadruple<T, U, V, W>, renderer: (Quadruple<T, U, V, W>) -> Unit) {
+    protected inline fun <T, U, V, W> renderIfChangedFour(crossinline fields: VS.() -> Quadruple<T, U, V, W>, crossinline renderer: (Quadruple<T, U, V, W>) -> Unit) {
         val prevViewState = prevViewState
         val currentField = fields(currentViewState)
         if (prevViewState == null) {
@@ -101,7 +101,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         }
     }
 
-    protected fun <T> renderIfChangedWithFirstRendering(field: VS.() -> T, renderer: (T, isFirstRendering: Boolean) -> Unit) {
+    protected inline fun <T> renderIfChangedWithFirstRendering(crossinline field: VS.() -> T, crossinline renderer: (T, isFirstRendering: Boolean) -> Unit) {
         val prevViewState = prevViewState
         val currentField = field(currentViewState)
         if (prevViewState == null || currentField !== field(prevViewState)) {
