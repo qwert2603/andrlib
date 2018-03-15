@@ -5,7 +5,8 @@ import android.support.annotation.CallSuper
 import android.view.View
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.qwert2603.andrlib.util.LogUtils
-import com.qwert2603.andrlib.util.Quadruple
+import com.qwert2603.andrlib.util.Quad
+import com.qwert2603.andrlib.util.Quint
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -87,7 +88,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         }
     }
 
-    protected inline fun <T, U, V, W> renderIfChangedFour(crossinline fields: VS.() -> Quadruple<T, U, V, W>, crossinline renderer: (Quadruple<T, U, V, W>) -> Unit) {
+    protected inline fun <T, U, V, W> renderIfChangedFour(crossinline fields: VS.() -> Quad<T, U, V, W>, crossinline renderer: (Quad<T, U, V, W>) -> Unit) {
         val prevViewState = prevViewState
         val currentField = fields(currentViewState)
         if (prevViewState == null) {
@@ -97,6 +98,21 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
         val prevField = fields(prevViewState)
         if (currentField.first !== prevField.first || currentField.second !== prevField.second
                 || currentField.third !== prevField.third || currentField.forth !== prevField.forth) {
+            renderer(currentField)
+        }
+    }
+
+    protected inline fun <T, U, V, W, X> renderIfChangedFive(crossinline fields: VS.() -> Quint<T, U, V, W, X>, crossinline renderer: (Quint<T, U, V, W, X>) -> Unit) {
+        val prevViewState = prevViewState
+        val currentField = fields(currentViewState)
+        if (prevViewState == null) {
+            renderer(currentField)
+            return
+        }
+        val prevField = fields(prevViewState)
+        if (currentField.first !== prevField.first || currentField.second !== prevField.second
+                || currentField.third !== prevField.third || currentField.forth !== prevField.forth
+                || currentField.fifth !== prevField.fifth) {
             renderer(currentField)
         }
     }
