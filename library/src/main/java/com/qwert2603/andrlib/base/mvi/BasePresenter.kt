@@ -54,6 +54,7 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
     }
 
     protected fun <T> Observable<T>.subscribeToView() = this
+            .doOnError { LogUtils.e("subscribeToView doOnError", it) }
             .subscribe()
             .addTo(disposableView)
 
