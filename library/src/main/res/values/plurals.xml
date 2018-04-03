@@ -2,9 +2,9 @@
 <resources>
 
     <plurals name="items">
-        <item quantity="one">%d элемент</item>
-        <item quantity="few">%d элемента</item>
-        <item quantity="other">%d элементов</item>
+        <item quantity="one">%d item</item>
+        <item quantity="many">%d items</item>
+        <item quantity="other">%d items</item>
     </plurals>
 
 </resources>
