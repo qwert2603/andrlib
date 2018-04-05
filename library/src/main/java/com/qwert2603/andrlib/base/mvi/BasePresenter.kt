@@ -47,7 +47,6 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
 
     override fun destroy() {
         LogUtils.d("BasePresenter#destroy ${hashCode()} $javaClass")
-        actionsDisposable.dispose()
         relayDisposable.dispose()
         disposableView.dispose()
         super.destroy()

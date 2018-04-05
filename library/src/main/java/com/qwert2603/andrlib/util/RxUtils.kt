@@ -9,24 +9,35 @@ import io.reactivex.functions.Function
 fun <T, U> Single<List<T>>.mapList(mapper: (T) -> U): Single<List<U>> = this
         .map { it.map(mapper) }
 
+fun <T> Single<T>.mapError(mapper: (Throwable) -> Throwable): Single<T> = this
+        .onErrorResumeNext { Single.error(mapper(it)) }
+
+fun <T> Observable<T>.mapError(mapper: (Throwable) -> Throwable?): Observable<T> = this
+        .onErrorResumeNext { t: Throwable ->
+            mapper(t)
+                    ?.let { Observable.error<T>(it) }
+                    ?: Observable.empty<T>()
+        }
+
 /**
  * Cancel Observable when [anth] emits item.
  * If [anth] emits items before Observable emit first item, it will not trigger cancellation.
  */
 fun <T, U> Observable<T>.cancelOn(anth: Observable<U>, cancelItem: T): Observable<T> {
     val completed = Exception()
-    return this
+    val shared = this.share()
+    return shared
             .materialize()
             .map { if (it.isOnComplete) throw completed else it }
             .dematerialize<T>()
             .mergeWith(anth
-                    .skipUntil(this@cancelOn)
+                    .skipUntil(shared)
                     .materialize()
                     .filter { it.value != null }
                     .map { cancelItem }
             )
             .takeUntil { it == cancelItem }
-            .onErrorResumeNext { t: Throwable -> if (t === completed) Observable.empty() else Observable.error(t) }
+            .mapError { it.takeIf { it !== completed } }
 }
 
 fun <T> Observable<T>.pausable(isOn: Observable<Boolean>): Observable<T> {
