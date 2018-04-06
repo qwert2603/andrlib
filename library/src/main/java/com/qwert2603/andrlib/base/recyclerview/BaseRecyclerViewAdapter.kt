@@ -78,7 +78,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
     var pageIndicatorErrorRetryClicks: PublishSubject<Any> = PublishSubject.create()
 
     @PluralsRes
-    protected open val pluralsRes = R.plurals.items
+    open fun pluralsRes() = R.plurals.items
 
     init {
         setHasStableIds(true)
@@ -100,7 +100,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseRecyclerViewHolder<IdentifiableLong> = when (viewType) {
         VIEW_TYPE_NEXT_PAGE_LOADING -> NextPageLoadingViewHolder(parent)
         VIEW_TYPE_NEXT_PAGE_ERROR -> NextPageErrorViewHolder(parent)
-        VIEW_TYPE_ALL_ITEMS_LOADED -> AllItemsLoadedViewHolder(parent, pluralsRes)
+        VIEW_TYPE_ALL_ITEMS_LOADED -> AllItemsLoadedViewHolder(parent)
         else -> onCreateViewHolderModel(parent, viewType)
     } as BaseRecyclerViewHolder<IdentifiableLong>
 
