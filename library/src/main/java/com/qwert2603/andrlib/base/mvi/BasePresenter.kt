@@ -66,7 +66,6 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
         subscribeViewState(
                 partialChanges
                         .scan(initialState, this::stateReducer)
-                        .skip(1)
                         .switchToUiIfNotYet(uiSchedulerProvider),
                 { view, viewState -> view.render(viewState) }
         )
