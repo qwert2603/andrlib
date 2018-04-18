@@ -3,11 +3,8 @@ package com.qwert2603.andrlib.base.mvi
 import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
-import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.util.AttributeSet
-import android.view.View
-import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.hannesdorfmann.mosby3.mvi.layout.MviFrameLayout
 import com.qwert2603.andrlib.util.LogUtils
 import com.qwert2603.andrlib.util.Quad
@@ -15,7 +12,7 @@ import com.qwert2603.andrlib.util.Quint
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>> : MviFrameLayout<V, P>, BaseView<VS>, FragmentForSnackbar {
+abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>> : MviFrameLayout<V, P>, BaseView<VS> {
 
     constructor(context: Context) : super(context)
 
@@ -25,8 +22,6 @@ abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
-
-    abstract override fun viewForSnackbar(): View?
 
     private var everRendered = false
 
