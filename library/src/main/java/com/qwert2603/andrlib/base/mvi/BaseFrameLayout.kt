@@ -53,7 +53,7 @@ abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, 
         LogUtils.d("${this.javaClass.simpleName} render ${vs.toString().replace('\n', ' ')}")
     }
 
-    protected fun Disposable.disposeOnDestroyView() {
+    protected fun Disposable.disposeOnDetachView() {
         viewDisposable.add(this)
     }
 
