@@ -19,7 +19,7 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
 
     protected val viewActions: PublishSubject<ViewAction> = PublishSubject.create<ViewAction>()
     private val actionsRelay = viewActions
-            .doOnNext { LogUtils.d("viewActions doOnNext $it") }
+            .doOnNext { LogUtils.d("BasePresenter#viewActions doOnNext $it") }
             .pausable(viewAttached)
     private val actionsObservable: PublishSubject<ViewAction> = PublishSubject.create<ViewAction>()
 
@@ -29,7 +29,7 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
     private val disposableView = CompositeDisposable()
 
     override fun attachView(view: V) {
-        LogUtils.d("attachView ${hashCode()} $javaClass $view")
+        LogUtils.d("BasePresenter#attachView ${hashCode()} $javaClass $view")
         super.attachView(view)
         actionsObservable
                 .switchToUiIfNotYet(uiSchedulerProvider)
@@ -53,7 +53,10 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
     }
 
     protected fun <T> Observable<T>.subscribeToView() = this
-            .doOnError { LogUtils.e("subscribeToView doOnError", it) }
+            .retry { t: Throwable ->
+                LogUtils.e("BasePresenter#subscribeToView retry", t)
+                true
+            }
             .subscribe()
             .addTo(disposableView)
 
