@@ -1,6 +1,8 @@
 package com.qwert2603.andrlib.base.mvi
 
 import android.annotation.TargetApi
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.support.annotation.CallSuper
@@ -39,6 +41,8 @@ abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, 
 
     override fun onDetachedFromWindow() {
         viewDisposable.clear()
+        (mviDelegate as? Application.ActivityLifecycleCallbacks)
+                ?.let { (context as Activity).application.unregisterActivityLifecycleCallbacks(it) }
         super.onDetachedFromWindow()
     }
 
