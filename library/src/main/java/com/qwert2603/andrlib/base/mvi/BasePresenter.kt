@@ -48,7 +48,6 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
     override fun destroy() {
         LogUtils.d("BasePresenter#destroy ${hashCode()} $javaClass")
         relayDisposable.dispose()
-        disposableView.dispose()
         super.destroy()
     }
 
@@ -72,5 +71,11 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
                         .switchToUiIfNotYet(uiSchedulerProvider),
                 { view, viewState -> view.render(viewState) }
         )
+    }
+
+    @CallSuper
+    override fun unbindIntents() {
+        super.unbindIntents()
+        disposableView.dispose()
     }
 }
