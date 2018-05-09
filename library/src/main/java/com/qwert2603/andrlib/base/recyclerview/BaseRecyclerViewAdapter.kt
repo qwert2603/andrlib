@@ -26,6 +26,9 @@ import io.reactivex.subjects.PublishSubject
  *
  * Classes-inheritor should override [getItemViewTypeModel], [onCreateViewHolderModel] and [onBindViewHolderModel]
  * for view-type defining, creating and binding model-ViewHolders.
+ *
+ * Also classes inheritors can specify custom id for some model item.
+ * See [getItemIdModel] for details.
  */
 abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adapter<BaseRecyclerViewHolder<IdentifiableLong>>() {
 
@@ -114,7 +117,18 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
         }
     }
 
+    /**
+     * @return view type for model [m].
+     * must be >= 0.
+     */
     open fun getItemViewTypeModel(m: M) = 0
+
+    /**
+     * @return custom id for model item.
+     * if null, [IdentifiableLong.id] will be used as item's id.
+     * by default returns null.
+     */
+    open fun getItemIdModel(m: M): Long? = null
 
     abstract fun onCreateViewHolderModel(parent: ViewGroup, viewType: Int): BaseRecyclerViewHolder<M>
 
@@ -135,5 +149,8 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
 
     final override fun getItemCount() = adapterList.size
 
-    final override fun getItemId(position: Int) = adapterList[position].id
+    @Suppress("UNCHECKED_CAST")
+    final override fun getItemId(position: Int): Long = (adapterList[position] as? M)
+            ?.let { getItemIdModel(it) }
+            ?: adapterList[position].id
 }
