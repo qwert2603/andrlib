@@ -65,7 +65,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
                 DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun getOldListSize() = old.size
                     override fun getNewListSize() = field.size
-                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition].id == field[newItemPosition].id
+                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = getItemId(old[oldItemPosition]) == getItemId(field[newItemPosition])
                     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition] == field[newItemPosition]
                 }).dispatchUpdatesTo(this)
             } else {
@@ -123,6 +123,12 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
      */
     open fun getItemViewTypeModel(m: M) = 0
 
+    @Suppress("UNCHECKED_CAST")
+    private fun getItemId(item: IdentifiableLong): Long {
+        if (item is PageListItem) return item.id
+        return getItemIdModel(item as M) ?: item.id
+    }
+
     /**
      * @return custom id for model item.
      * if null, [IdentifiableLong.id] will be used as item's id.
@@ -149,8 +155,5 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
 
     final override fun getItemCount() = adapterList.size
 
-    @Suppress("UNCHECKED_CAST")
-    final override fun getItemId(position: Int): Long = (adapterList[position] as? M)
-            ?.let { getItemIdModel(it) }
-            ?: adapterList[position].id
+    final override fun getItemId(position: Int): Long = getItemId(adapterList[position])
 }
