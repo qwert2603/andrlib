@@ -28,8 +28,9 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
     protected open fun createLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(context)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         list_RecyclerView.layoutManager = createLayoutManager()
+        list_RecyclerView.adapter = adapter
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {
@@ -55,28 +56,16 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
         // to prevent from showing old list when new list is showing after loading or showing "list is empty".
         if (vs.lrModel.isModelLoaded) {
             if (vs.showingList.isEmpty() && vs.listModel.allItemsLoaded) {
-                if (list_RecyclerView.adapter != null) {
-                    adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(emptyList())
-                    adapter.notifyDataSetChanged()
-                    list_RecyclerView.adapter = null
-                    adapter.recyclerView = null
-                }
+                adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(emptyList())
+                adapter.notifyDataSetChanged()
                 list_ViewAnimator.showIfNotYet(LAYER_EMPTY)
             } else {
-                if (list_RecyclerView.adapter == null) {
-                    list_RecyclerView.adapter = adapter
-                    adapter.recyclerView = list_RecyclerView
-                }
                 adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(vs.showingList, vs.pageIndicatorItem())
                 list_ViewAnimator.showIfNotYet(LAYER_LIST)
             }
         } else {
-            if (list_RecyclerView.adapter != null) {
-                adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(emptyList())
-                adapter.notifyDataSetChanged()
-                list_RecyclerView.adapter = null
-                adapter.recyclerView = null
-            }
+            adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(emptyList())
+            adapter.notifyDataSetChanged()
             list_ViewAnimator.showIfNotYet(LAYER_NOTHING, animate = false)
         }
     }
