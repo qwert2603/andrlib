@@ -130,6 +130,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
     }
 
     /**
+     * todo: this is bad!
      * @return custom id for model item.
      * if null, [IdentifiableLong.id] will be used as item's id.
      * by default returns null.
