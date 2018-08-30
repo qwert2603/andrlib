@@ -3,15 +3,14 @@ package com.qwert2603.andrlib.base.mvi
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.view.View
-import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.qwert2603.andrlib.util.LogUtils
 import com.qwert2603.andrlib.util.Quad
 import com.qwert2603.andrlib.util.Quint
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>> :
-        MviFragment<V, P>(), BaseView<VS>, FragmentForSnackbar {
+abstract class BaseDialogFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>> :
+        MviDialogFragment<V, P>(), BaseView<VS>, FragmentForSnackbar {
 
     abstract override fun viewForSnackbar(): View?
 
