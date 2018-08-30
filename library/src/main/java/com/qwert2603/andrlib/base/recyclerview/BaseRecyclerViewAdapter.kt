@@ -26,9 +26,6 @@ import io.reactivex.subjects.PublishSubject
  *
  * Classes-inheritor should override [getItemViewTypeModel], [onCreateViewHolderModel] and [onBindViewHolderModel]
  * for view-type defining, creating and binding model-ViewHolders.
- *
- * Also classes inheritors can specify custom id for some model item.
- * See [getItemIdModel] for details.
  */
 abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adapter<BaseRecyclerViewHolder<IdentifiableLong>>() {
 
@@ -65,7 +62,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
                 DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun getOldListSize() = old.size
                     override fun getNewListSize() = field.size
-                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = getItemId(old[oldItemPosition]) == getItemId(field[newItemPosition])
+                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition].id == field[newItemPosition].id
                     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition] == field[newItemPosition]
                 }).dispatchUpdatesTo(this)
             } else {
@@ -123,20 +120,6 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
      */
     open fun getItemViewTypeModel(m: M) = 0
 
-    @Suppress("UNCHECKED_CAST")
-    private fun getItemId(item: IdentifiableLong): Long {
-        if (item is PageListItem) return item.id
-        return getItemIdModel(item as M) ?: item.id
-    }
-
-    /**
-     * todo: this is bad!
-     * @return custom id for model item.
-     * if null, [IdentifiableLong.id] will be used as item's id.
-     * by default returns null.
-     */
-    open fun getItemIdModel(m: M): Long? = null
-
     abstract fun onCreateViewHolderModel(parent: ViewGroup, viewType: Int): BaseRecyclerViewHolder<M>
 
     open fun onBindViewHolderModel(holder: BaseRecyclerViewHolder<M>, position: Int) {
@@ -156,5 +139,5 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
 
     final override fun getItemCount() = adapterList.size
 
-    final override fun getItemId(position: Int): Long = getItemId(adapterList[position])
+    final override fun getItemId(position: Int): Long = adapterList[position].id
 }

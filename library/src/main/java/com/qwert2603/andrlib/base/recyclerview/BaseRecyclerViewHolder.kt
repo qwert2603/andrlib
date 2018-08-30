@@ -20,7 +20,7 @@ abstract class BaseRecyclerViewHolder<M : IdentifiableLong>(parent: ViewGroup, @
     private val viewDisposable = CompositeDisposable()
 
     init {
-        itemView.setOnClickListener {
+        itemView.setOnClickListener { _ ->
             adapter?.let {
                 if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
                 if (adapterPosition < it.adapterList.modelList.size) {
@@ -30,7 +30,7 @@ abstract class BaseRecyclerViewHolder<M : IdentifiableLong>(parent: ViewGroup, @
                 }
             }
         }
-        itemView.setOnLongClickListener(View.OnLongClickListener {
+        itemView.setOnLongClickListener(View.OnLongClickListener { _ ->
             adapter?.let {
                 if (adapterPosition == RecyclerView.NO_POSITION) return@OnLongClickListener false
                 if (adapterPosition < it.adapterList.modelList.size) {

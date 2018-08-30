@@ -25,8 +25,8 @@ dependencies {
 
     ext.support_version = '27.1.1'
     ext.mosby_version = '3.1.0'
-    ext.rxjava_version = '2.1.16'
-    ext.rxandroid_version = '2.0.2'
+    ext.rxjava_version = '2.2.1'
+    ext.rxandroid_version = '2.1.0'
     ext.rxbinding_version = '2.1.1'
 
     ext.junit_version = '4.12'
