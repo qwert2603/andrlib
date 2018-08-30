@@ -112,7 +112,7 @@ public abstract class MviDialogFragment<V extends MvpView, P extends MviPresente
     super.onActivityCreated(savedInstanceState);
     // comment because dialog has no view and don't call onViewCreated.
     // (see implementation FragmentMviDelegateImpl#onActivityCreated(savedInstanceState);)
-     getMvpDelegate().onActivityCreated(savedInstanceState);
+//     getMvpDelegate().onActivityCreated(savedInstanceState);
   }
 
   @CallSuper @Override public void onAttach(Activity activity) {
