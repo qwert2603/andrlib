@@ -44,7 +44,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
      * Refresh initial model after it was loaded successfully.
      * While refreshing already loaded initial model will be showing.
      */
-    open protected val refreshIntent: Observable<Any> = intent { it.refresh() }.share()
+    protected open val refreshIntent: Observable<Any> = intent { it.refresh() }.share()
 
     /** @return Observable that emits every time when loading initial model. */
     protected val initialModelLoading: Observable<Any> by lazy {

@@ -115,6 +115,7 @@ public abstract class MviDialogFragment<V extends MvpView, P extends MviPresente
 //     getMvpDelegate().onActivityCreated(savedInstanceState);
   }
 
+  @SuppressWarnings("deprecation")
   @CallSuper @Override public void onAttach(Activity activity) {
     super.onAttach(activity);
     getMvpDelegate().onAttach(activity);
