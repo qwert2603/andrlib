@@ -28,7 +28,7 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
     protected abstract fun nextPageSingle(): Single<Page<T>>
 
     protected fun paginationChanges(): Observable<PartialChange> = loadNextPageIntent
-            .switchMap {
+            .switchMap { _ ->
                 nextPageSingle()
                         .toObservable()
                         .map<PartialChange> { ListPartialChange.NextPageLoaded(it) }
@@ -46,7 +46,9 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
                                 nextPageLoading = false,
                                 nextPageError = null
                         ))
-                    } else it
+                    } else {
+                        it
+                    }
                 }
         return when (change) {
             is ListPartialChange.NextPageLoading -> vs.changeListModel(vs.listModel.copy(

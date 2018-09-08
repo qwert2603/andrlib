@@ -5,12 +5,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.RxView
 import com.qwert2603.andrlib.base.mvi.BasePresenter
 import com.qwert2603.andrlib.base.mvi.load_refresh.LRFragment
 import com.qwert2603.andrlib.base.recyclerview.BaseRecyclerViewAdapter
 import com.qwert2603.andrlib.model.IdentifiableLong
 import com.qwert2603.andrlib.util.showIfNotYet
-import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.include_list.*
 
@@ -38,7 +38,7 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
         super.onDestroyView()
     }
 
-    override fun loadNextPage(): Observable<Any> = RxView.preDraws(list_RecyclerView, { true })
+    override fun loadNextPage(): Observable<Any> = RxView.preDraws(list_RecyclerView) { true }
             .filter {
                 with(currentViewState.lrModel) { isModelLoaded && !refreshing } &&
                         with(currentViewState.listModel) { !allItemsLoaded && !nextPageLoading && nextPageError == null }

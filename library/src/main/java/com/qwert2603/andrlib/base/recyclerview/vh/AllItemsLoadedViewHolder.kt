@@ -7,7 +7,7 @@ import com.qwert2603.andrlib.base.recyclerview.page_list_item.AllItemsLoaded
 import kotlinx.android.synthetic.main.item_all_items_loaded.view.*
 
 class AllItemsLoadedViewHolder(parent: ViewGroup)
-    : BaseRecyclerViewHolder<AllItemsLoaded>(parent, R.layout.item_all_items_loaded) {
+    : BaseRecyclerViewHolder<AllItemsLoaded>(parent, R.layout.item_all_items_loaded), PageIndicatorViewHolder {
     override fun bind(m: AllItemsLoaded) {
         super.bind(m)
         itemView.itemsCount_TextView.text = itemView.resources.getQuantityString(

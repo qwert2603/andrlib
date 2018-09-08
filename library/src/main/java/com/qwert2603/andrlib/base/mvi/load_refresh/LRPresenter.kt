@@ -72,8 +72,8 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
                             retryIntent
                     )
                     .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
-                    .switchMap {
-                        initialModelSingle(it)
+                    .switchMap { a ->
+                        initialModelSingle(a)
                                 .toObservable()
                                 .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
                                 .onErrorReturn { LRPartialChange.LoadingError(it) }
@@ -81,8 +81,8 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
                     },
             refreshIntent
                     .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
-                    .switchMap {
-                        initialModelSingle(it)
+                    .switchMap { a ->
+                        initialModelSingle(a)
                                 .toObservable()
                                 .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
                                 .onErrorReturn {
