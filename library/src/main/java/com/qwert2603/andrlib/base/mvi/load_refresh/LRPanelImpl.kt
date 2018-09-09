@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ViewAnimator
-import com.qwert2603.andrlib.R
-import com.qwert2603.andrlib.util.showIfNotYet
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import com.jakewharton.rxbinding2.view.RxView
+import com.qwert2603.andrlib.R
+import com.qwert2603.andrlib.util.showIfNotYet
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.include_retry_panel.view.*
 import kotlinx.android.synthetic.main.view_load_refresh.view.*
@@ -62,11 +62,11 @@ class LRPanelImpl @JvmOverloads constructor(context: Context, attrs: AttributeSe
     override fun refreshes(): Observable<Any> = RxSwipeRefreshLayout.refreshes(this)
 
     override fun render(vs: LRViewState) {
-        when {
-            vs.lrModel.loading -> LR_ViewAnimator.showIfNotYet(LAYER_LOADING)
-            vs.lrModel.loadingError != null -> LR_ViewAnimator.showIfNotYet(LAYER_ERROR)
-            else -> LR_ViewAnimator.showIfNotYet(LAYER_MODEL)
-        }
+        LR_ViewAnimator.showIfNotYet(when {
+            vs.lrModel.loading -> LAYER_LOADING
+            vs.lrModel.loadingError != null -> LAYER_ERROR
+            else -> LAYER_MODEL
+        })
 
         if (this.isRefreshing != vs.lrModel.refreshing) this.isRefreshing = vs.lrModel.refreshing
         if (this.isEnabled != vs.lrModel.canRefresh) this.isEnabled = vs.lrModel.canRefresh
