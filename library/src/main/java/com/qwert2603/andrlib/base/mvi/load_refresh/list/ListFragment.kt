@@ -66,7 +66,7 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
         } else {
             adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(emptyList())
             adapter.notifyDataSetChanged()
-            list_ViewAnimator.showIfNotYet(LAYER_NOTHING, animate = false)
+            list_ViewAnimator.showIfNotYet(LAYER_NOTHING)
         }
     }
 
