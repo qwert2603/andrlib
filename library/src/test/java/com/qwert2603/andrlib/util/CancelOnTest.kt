@@ -152,4 +152,18 @@ class CancelOnTest {
                     assertValues(0, 1, 2, 3, 4)
                 }
     }
+
+    @Test
+    fun startWith() {
+        Observable.timer(200, TimeUnit.MILLISECONDS)
+                .startWith(-1L)
+                .doOnSubscribe { println("CancelOnTest startWith doOnSubscribe") }
+                .cancelOn(Observable.just("qq").delay(10, TimeUnit.MILLISECONDS), 14L)
+                .test()
+                .apply {
+                    awaitTerminalEvent(1, TimeUnit.SECONDS)
+                    assertComplete()
+                    assertValues(-1L, 14L)
+                }
+    }
 }

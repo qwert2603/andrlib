@@ -25,7 +25,7 @@ fun <T> Observable<T>.mapError(mapper: (Throwable) -> Throwable?): Observable<T>
  */
 fun <T, U> Observable<T>.cancelOn(anth: Observable<U>, cancelItem: T): Observable<T> {
     val completed = Exception()
-    val shared = this.share()
+    val shared = this.publish().refCount(2)
     return shared
             .materialize()
             .map { if (it.isOnComplete) throw completed else it }
