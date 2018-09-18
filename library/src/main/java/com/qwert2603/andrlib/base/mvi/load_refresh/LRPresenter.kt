@@ -22,6 +22,8 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
 
     protected abstract fun initialModelSingle(additionalKey: A): Single<I>
 
+    protected open fun initialModelSingleRefresh(additionalKey: A): Single<I> = initialModelSingle(additionalKey)
+
     /**
      * @param i initial model from [LRPartialChange.InitialModelLoaded].
      * @return new view state with changed initial model.
@@ -82,7 +84,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
             refreshIntent
                     .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
                     .switchMap { a ->
-                        initialModelSingle(a)
+                        initialModelSingleRefresh(a)
                                 .toObservable()
                                 .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
                                 .onErrorReturn {
