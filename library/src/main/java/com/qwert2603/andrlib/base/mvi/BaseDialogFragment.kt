@@ -39,7 +39,7 @@ abstract class BaseDialogFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<
             everRendered = true
         }
         currentViewState = vs
-        LogUtils.d("${this.javaClass.simpleName} render ${vs.toString().replace('\n', ' ')}")
+        LogUtils.d { "${this.javaClass.simpleName} render ${vs.toString().replace('\n', ' ')}" }
     }
 
     protected fun Disposable.disposeOnDestroyView() {

@@ -98,7 +98,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
 
     @CallSuper
     override fun stateReducer(vs: VS, change: PartialChange): VS {
-        LogUtils.d("LRPresenter ${this.javaClass.simpleName} stateReducer ${change.toString().replace('\n', ' ')}")
+        LogUtils.d { "LRPresenter ${this.javaClass.simpleName} stateReducer ${change.toString().replace('\n', ' ')}" }
         if (change !is LRPartialChange) throw Exception()
         return when (change) {
             is LRPartialChange.LoadingStarted -> vs.changeLRModel(vs.lrModel.copy(loading = true, loadingError = null, canRefresh = false))

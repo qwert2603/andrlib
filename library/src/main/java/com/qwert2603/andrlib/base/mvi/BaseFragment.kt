@@ -42,7 +42,7 @@ abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>
             everRendered = true
         }
         currentViewState = vs
-        LogUtils.d("${this.javaClass.simpleName} render ${vs.toString().replace('\n', ' ')}")
+        LogUtils.d { "${this.javaClass.simpleName} render ${vs.toString().replace('\n', ' ')}" }
     }
 
     protected fun Disposable.disposeOnDestroyView() {

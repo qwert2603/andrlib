@@ -17,6 +17,16 @@ object LogUtils {
 
     var logType = LogType.ANDROID
 
+    fun d(msg: () -> String) {
+        when (logType) {
+            LogUtils.LogType.NONE -> nth()
+            LogUtils.LogType.ANDROID -> Log.d(APP_TAG, msg())
+            LogUtils.LogType.ANDROID_ERRORS -> nth()
+            LogUtils.LogType.SOUT -> println("$APP_TAG ${msg()}")
+            LogUtils.LogType.SOUT_ERRORS -> nth()
+        }
+    }
+
     fun d(msg: String) {
         d(APP_TAG, msg)
     }
