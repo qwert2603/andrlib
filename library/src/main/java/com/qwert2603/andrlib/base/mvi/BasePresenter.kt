@@ -74,6 +74,7 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
     override fun bindIntents() {
         subscribeViewState(
                 partialChanges
+                        .serialize()
                         .scan(initialState, this::stateReducer)
                         .switchToUiIfNotYet(uiSchedulerProvider),
                 { view, viewState -> view.render(viewState) }
