@@ -32,11 +32,6 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onDestroyView() {
-        adapter.recyclerView = null
-        super.onDestroyView()
-    }
-
     override fun loadNextPage(): Observable<Any> = RxView.preDraws(list_RecyclerView) { true }
             .filter {
                 with(currentViewState.lrModel) { isModelLoaded && !refreshing } &&
@@ -59,13 +54,11 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
                     adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(emptyList())
                     adapter.notifyDataSetChanged()
                     list_RecyclerView.adapter = null
-                    adapter.recyclerView = null
                 }
                 list_ViewAnimator.showIfNotYet(LAYER_EMPTY)
             } else {
                 if (list_RecyclerView.adapter == null) {
                     list_RecyclerView.adapter = adapter
-                    adapter.recyclerView = list_RecyclerView
                 }
                 adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(vs.showingList, vs.pageIndicatorItem())
                 list_ViewAnimator.showIfNotYet(LAYER_LIST)
@@ -75,7 +68,6 @@ abstract class ListFragment<VS : ListViewState<T>, V : ListView<VS>, P : BasePre
                 adapter.adapterList = BaseRecyclerViewAdapter.AdapterList(emptyList())
                 adapter.notifyDataSetChanged()
                 list_RecyclerView.adapter = null
-                adapter.recyclerView = null
             }
             list_ViewAnimator.showIfNotYet(LAYER_NOTHING, animate = false)
         }

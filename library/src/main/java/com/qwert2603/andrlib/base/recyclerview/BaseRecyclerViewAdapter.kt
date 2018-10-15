@@ -37,8 +37,6 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
 
     var useDiffUtils = true
 
-    var recyclerView: RecyclerView? = null
-
     data class AdapterList<out M : IdentifiableLong>(
             val modelList: List<M>,
             val pageIndicator: PageListItem? = null
