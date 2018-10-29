@@ -11,9 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
 abstract class BaseFragment<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>> :
-        MviFragment<V, P>(), BaseView<VS>, FragmentForSnackbar {
-
-    abstract override fun viewForSnackbar(): View?
+        MviFragment<V, P>(), BaseView<VS> {
 
     private var everRendered = false
 
