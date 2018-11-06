@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LR_RetryPanel"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:clipToPadding="false"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/LR_LoadingErrorMessage_TextView"
+    <LinearLayout
+        android:id="@+id/LR_RetryPanel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp"
-        android:text="@string/error_text"
-        android:textColor="@color/colorAccent"
-        android:textSize="20sp" />
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <Button
-        android:id="@+id/LR_Retry_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/retry_loading_text" />
+        <TextView
+            android:id="@+id/LR_LoadingErrorMessage_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:text="@string/error_text"
+            android:textColor="@color/andrlib_error"
+            android:textSize="20sp" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/LR_Retry_Button"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry_loading_text"
+            app:strokeColor="@color/colorAccent"
+            tools:ignore="MissingPrefix" />
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

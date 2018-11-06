@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/list_loaded_completely"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/all_items_loaded_title"
         android:textSize="16sp" />
 
     <TextView
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/all_items_loaded_subtitle"
         android:textSize="14sp"
         tools:text="14 элементов" />
 

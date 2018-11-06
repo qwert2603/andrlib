@@ -3,4 +3,8 @@
     <color name="colorPrimary">#43A047</color>
     <color name="colorPrimaryDark">#2E7D32</color>
     <color name="colorAccent">#FF9800</color>
+
+    <color name="andrlib_error">@color/colorAccent</color>
+    <color name="all_items_loaded_title">@color/colorPrimary</color>
+    <color name="all_items_loaded_subtitle">@color/colorPrimaryDark</color>
 </resources>

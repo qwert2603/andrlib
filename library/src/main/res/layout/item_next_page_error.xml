@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:text="@string/loading_error_text"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/andrlib_error"
         android:textSize="20sp" />
 
     <Button
