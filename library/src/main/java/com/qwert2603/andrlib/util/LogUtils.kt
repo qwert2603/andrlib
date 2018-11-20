@@ -73,4 +73,36 @@ object LogUtils {
     }
 
     private fun nth() {}
+
+    fun withErrorLoggingOnly(action: () -> Unit) {
+        val prev = logType
+        logType = when (prev) {
+            LogUtils.LogType.NONE -> LogUtils.LogType.NONE
+            LogUtils.LogType.ANDROID -> LogUtils.LogType.ANDROID_ERRORS
+            LogUtils.LogType.ANDROID_ERRORS -> LogUtils.LogType.ANDROID_ERRORS
+            LogUtils.LogType.SOUT -> LogUtils.LogType.SOUT_ERRORS
+            LogUtils.LogType.SOUT_ERRORS -> LogUtils.LogType.SOUT_ERRORS
+        }
+        try {
+            action()
+        } finally {
+            logType = prev
+        }
+    }
+
+    fun allowDebugLogging(action: () -> Unit) {
+        val prev = logType
+        logType = when (prev) {
+            LogUtils.LogType.NONE -> LogUtils.LogType.NONE
+            LogUtils.LogType.ANDROID -> LogUtils.LogType.ANDROID
+            LogUtils.LogType.ANDROID_ERRORS -> LogUtils.LogType.ANDROID
+            LogUtils.LogType.SOUT -> LogUtils.LogType.SOUT
+            LogUtils.LogType.SOUT_ERRORS -> LogUtils.LogType.SOUT
+        }
+        try {
+            action()
+        } finally {
+            logType = prev
+        }
+    }
 }
