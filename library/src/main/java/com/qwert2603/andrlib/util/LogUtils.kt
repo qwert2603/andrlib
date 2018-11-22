@@ -74,7 +74,7 @@ object LogUtils {
 
     private fun nth() {}
 
-    fun withErrorLoggingOnly(action: () -> Unit) {
+    fun <T> withErrorLoggingOnly(action: () -> T): T {
         val prev = logType
         logType = when (prev) {
             LogUtils.LogType.NONE -> LogUtils.LogType.NONE
@@ -84,13 +84,13 @@ object LogUtils {
             LogUtils.LogType.SOUT_ERRORS -> LogUtils.LogType.SOUT_ERRORS
         }
         try {
-            action()
+            return action()
         } finally {
             logType = prev
         }
     }
 
-    fun allowDebugLogging(action: () -> Unit) {
+    fun <T> allowDebugLogging(action: () -> T): T {
         val prev = logType
         logType = when (prev) {
             LogUtils.LogType.NONE -> LogUtils.LogType.NONE
@@ -100,7 +100,7 @@ object LogUtils {
             LogUtils.LogType.SOUT_ERRORS -> LogUtils.LogType.SOUT
         }
         try {
-            action()
+            return action()
         } finally {
             logType = prev
         }
