@@ -11,6 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="@string/list_loaded_completely"
         android:textColor="@color/all_items_loaded_title"
         android:textSize="16sp" />
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
         android:textColor="@color/all_items_loaded_subtitle"
         android:textSize="14sp"
         tools:text="14 элементов" />
