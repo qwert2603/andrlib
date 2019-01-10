@@ -1,10 +1,12 @@
 package com.qwert2603.andrlib.util
 
 import android.util.Log
+import java.io.PrintWriter
+import java.io.StringWriter
 
 object LogUtils {
 
-    private const val APP_TAG = "AASSDD"
+    var APP_TAG = "AASSDD"
     private const val ERROR_MSG = "ERROR!!!"
 
     enum class LogType {
@@ -16,14 +18,23 @@ object LogUtils {
     }
 
     var logType = LogType.ANDROID
+        @Synchronized set
+
+    var errorsFilter: (Throwable) -> Boolean = { true }
+
+    var onErrorLogged: ((tag: String, msg: String, t: Throwable?) -> Unit)? = null
 
     fun d(msg: () -> String) {
+        d(APP_TAG, msg)
+    }
+
+    fun d(tag: String, msg: () -> String) {
         when (logType) {
-            LogUtils.LogType.NONE -> nth()
-            LogUtils.LogType.ANDROID -> Log.d(APP_TAG, msg())
-            LogUtils.LogType.ANDROID_ERRORS -> nth()
-            LogUtils.LogType.SOUT -> println("$APP_TAG ${msg()}")
-            LogUtils.LogType.SOUT_ERRORS -> nth()
+            LogUtils.LogType.NONE -> Unit
+            LogUtils.LogType.ANDROID -> Log.d(tag, msg())
+            LogUtils.LogType.ANDROID_ERRORS -> Unit
+            LogUtils.LogType.SOUT -> println("$tag ${msg()}")
+            LogUtils.LogType.SOUT_ERRORS -> Unit
         }
     }
 
@@ -33,47 +44,46 @@ object LogUtils {
 
     fun d(tag: String, msg: String) {
         when (logType) {
-            LogUtils.LogType.NONE -> nth()
+            LogUtils.LogType.NONE -> Unit
             LogUtils.LogType.ANDROID -> Log.d(tag, msg)
-            LogUtils.LogType.ANDROID_ERRORS -> nth()
+            LogUtils.LogType.ANDROID_ERRORS -> Unit
             LogUtils.LogType.SOUT -> println("$tag $msg")
-            LogUtils.LogType.SOUT_ERRORS -> nth()
+            LogUtils.LogType.SOUT_ERRORS -> Unit
         }
     }
 
-    @JvmOverloads
     fun e(msg: String = ERROR_MSG, t: Throwable? = null) {
-        when (logType) {
-            LogUtils.LogType.NONE -> nth()
-            LogUtils.LogType.ANDROID -> Log.e(APP_TAG, "$msg $t", t)
-            LogUtils.LogType.ANDROID_ERRORS -> Log.e(APP_TAG, "$msg $t", t)
-            LogUtils.LogType.SOUT -> println("$APP_TAG $msg $t\n${t?.printStackTrace()}")
-            LogUtils.LogType.SOUT_ERRORS -> println("$APP_TAG $msg $t\n${t?.printStackTrace()}")
-        }
+        e(APP_TAG, msg, t)
     }
 
-    fun e(tag: String, msg: String, t: Throwable) {
+    fun e(tag: String, msg: String, t: Throwable?) {
+        if (t != null && !errorsFilter(t)) {
+            val stringWriter = StringWriter()
+            t.printStackTrace(PrintWriter(stringWriter))
+            d(tag, "msg ${t.message}\n" + stringWriter.toString())
+            return
+        }
         when (logType) {
-            LogUtils.LogType.NONE -> nth()
+            LogUtils.LogType.NONE -> Unit
             LogUtils.LogType.ANDROID -> Log.e(tag, "$msg $t", t)
             LogUtils.LogType.ANDROID_ERRORS -> Log.e(tag, "$msg $t", t)
-            LogUtils.LogType.SOUT -> println("$APP_TAG $msg $t\n${t.printStackTrace()}")
-            LogUtils.LogType.SOUT_ERRORS -> println("$APP_TAG $msg $t\n${t.printStackTrace()}")
+            LogUtils.LogType.SOUT -> System.err.println("$tag $msg $t").also { t?.printStackTrace() }
+            LogUtils.LogType.SOUT_ERRORS -> System.err.println("$tag $msg $t").also { t?.printStackTrace() }
         }
+        onErrorLogged?.invoke(tag, msg, t)
     }
 
     fun printCurrentStack() {
         when (logType) {
-            LogUtils.LogType.NONE -> nth()
+            LogUtils.LogType.NONE -> Unit
             LogUtils.LogType.ANDROID -> Log.v(APP_TAG, "", Exception())
-            LogUtils.LogType.ANDROID_ERRORS -> nth()
-            LogUtils.LogType.SOUT -> println("$APP_TAG, ${Exception().printStackTrace()}")
-            LogUtils.LogType.SOUT_ERRORS -> nth()
+            LogUtils.LogType.ANDROID_ERRORS -> Unit
+            LogUtils.LogType.SOUT -> println("$APP_TAG printCurrentStack").also { Exception().printStackTrace() }
+            LogUtils.LogType.SOUT_ERRORS -> Unit
         }
     }
 
-    private fun nth() {}
-
+    @Synchronized
     fun <T> withErrorLoggingOnly(action: () -> T): T {
         val prev = logType
         logType = when (prev) {
@@ -90,6 +100,7 @@ object LogUtils {
         }
     }
 
+    @Synchronized
     fun <T> allowDebugLogging(action: () -> T): T {
         val prev = logType
         logType = when (prev) {
