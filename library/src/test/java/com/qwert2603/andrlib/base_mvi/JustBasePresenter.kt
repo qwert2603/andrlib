@@ -13,7 +13,7 @@ class JustBasePresenter(uiSchedulerProvider: UiSchedulerProvider) : BasePresente
         viewActions.onNext(action)
     }
 
-    override val initialState = Any()
+    public override val initialState = Any()
 
     override val partialChanges: Observable<PartialChange> = Observable.never()
 

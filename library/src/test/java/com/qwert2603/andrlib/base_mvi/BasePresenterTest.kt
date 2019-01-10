@@ -8,6 +8,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import org.mockito.internal.verification.VerificationModeFactory
 
 class BasePresenterTest {
 
@@ -30,6 +31,8 @@ class BasePresenterTest {
 
         presenter.attachView(view)
 
+        Mockito.verify(view).render(presenter.initialState)
+
         Mockito.verify(view).executeAction(action_1)
 
         val action_2 = TestAction.Action_1(14)
@@ -50,6 +53,8 @@ class BasePresenterTest {
         Mockito.verifyNoMoreInteractions(view)
 
         presenter.attachView(view)
+
+        Mockito.verify(view, VerificationModeFactory.times(2)).render(presenter.initialState)
 
         Mockito.verify(view).executeAction(TestAction.Action_1(19))
 
