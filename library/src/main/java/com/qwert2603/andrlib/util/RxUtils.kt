@@ -36,7 +36,7 @@ fun <T, U> Observable<T>.cancelOn(anth: Observable<U>, cancelItem: T): Observabl
                     .filter { it.value != null }
                     .map { cancelItem }
             )
-            .takeUntil { it == cancelItem }
+            .takeUntil { it === cancelItem }
             .mapError { it.takeIf { it !== completed } }
 }
 

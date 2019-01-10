@@ -24,7 +24,7 @@ abstract class BasePresenter<V : BaseView<VS>, VS>(protected val uiSchedulerProv
             .pausable(viewAttached)
     private val actionsObservable: PublishSubject<ViewAction> = PublishSubject.create<ViewAction>()
 
-    private var relayDisposable: Disposable = actionsRelay.subscribe { actionsObservable.onNext(it) }
+    private val relayDisposable: Disposable = actionsRelay.subscribe { actionsObservable.onNext(it) }
     private val actionsDisposable = CompositeDisposable()
 
     private val disposableView = CompositeDisposable()

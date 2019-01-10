@@ -23,7 +23,7 @@ abstract class ListPresenter<A, I, VS : ListViewState<T>, V : ListView<VS>, T : 
     protected abstract fun VS.addNextPage(nextPage: List<T>): VS
 
     /** Load next page after previous page was loaded or retry loading page. */
-    protected val loadNextPageIntent: Observable<Any> = intent { it.loadNextPage() }.share()
+    protected val loadNextPageIntent: Observable<Any> = intent { it.loadNextPage() }.shareAfterViewSubscribed()
 
     protected abstract fun nextPageSingle(): Single<Page<T>>
 

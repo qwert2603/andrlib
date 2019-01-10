@@ -37,16 +37,16 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
     protected open val reloadIntent: Observable<Any> = Observable.never()
 
     /** Load initial model. */
-    protected val loadIntent: Observable<Any> = intent { it.load() }.share()
+    protected val loadIntent: Observable<Any> = intent { it.load() }.shareAfterViewSubscribed()
 
     /** Reload initial model after error loading it. */
-    protected val retryIntent: Observable<Any> = intent { it.retry() }.share()
+    protected val retryIntent: Observable<Any> = intent { it.retry() }.shareAfterViewSubscribed()
 
     /**
      * Refresh initial model after it was loaded successfully.
      * While refreshing already loaded initial model will be showing.
      */
-    protected open val refreshIntent: Observable<Any> = intent { it.refresh() }.share()
+    protected open val refreshIntent: Observable<Any> = intent { it.refresh() }.shareAfterViewSubscribed()
 
     /** @return Observable that emits every time when loading initial model. */
     protected val initialModelLoading: Observable<Any> by lazy {
@@ -58,43 +58,46 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
                 ),
                 retryIntent,
                 refreshIntent
-        ).share()
+        ).shareAfterViewSubscribed()
     }
 
     /** [additionalKey] additional key that can be used for loading initial model. */
     @Suppress("UNCHECKED_CAST")
-    protected fun loadRefreshPartialChanges(additionalKey: Observable<A> = Observable.just(Any() as A)): Observable<PartialChange> = Observable.merge(
-            Observable
-                    .merge(
-                            Observable.combineLatest(
-                                    loadIntent,
-                                    reloadIntent.startWith(Any()),
-                                    BiFunction { k, _ -> k }
-                            ),
-                            retryIntent
-                    )
-                    .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
-                    .switchMap { a ->
-                        initialModelSingle(a)
-                                .toObservable()
-                                .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
-                                .onErrorReturn { LRPartialChange.LoadingError(it) }
-                                .startWith(LRPartialChange.LoadingStarted())
-                    },
-            refreshIntent
-                    .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
-                    .switchMap { a ->
-                        initialModelSingleRefresh(a)
-                                .toObservable()
-                                .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
-                                .onErrorReturn {
-                                    viewActions.onNext(LRViewAction.RefreshingError(it))
-                                    LRPartialChange.RefreshError(it)
-                                }
-                                .startWith(LRPartialChange.RefreshStarted())
-                                .cancelOn(Observable.merge(reloadIntent, retryIntent), LRPartialChange.RefreshCancelled())
-                    }
-    )
+    protected fun loadRefreshPartialChanges(additionalKey: Observable<A> = Observable.just(Any() as A)): Observable<PartialChange> {
+        val additionalKeyShared = additionalKey.shareAfterViewSubscribed()
+        return Observable.merge(
+                Observable
+                        .merge(
+                                Observable.combineLatest(
+                                        loadIntent,
+                                        reloadIntent.startWith(Any()),
+                                        BiFunction { k, _ -> k }
+                                ),
+                                retryIntent
+                        )
+                        .withLatestFrom(additionalKeyShared, BiFunction { _: Any, a: A -> a })
+                        .switchMap { a ->
+                            initialModelSingle(a)
+                                    .toObservable()
+                                    .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
+                                    .onErrorReturn { LRPartialChange.LoadingError(it) }
+                                    .startWith(LRPartialChange.LoadingStarted())
+                        },
+                refreshIntent
+                        .withLatestFrom(additionalKeyShared, BiFunction { _: Any, a: A -> a })
+                        .switchMap { a ->
+                            initialModelSingleRefresh(a)
+                                    .toObservable()
+                                    .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
+                                    .onErrorReturn {
+                                        viewActions.onNext(LRViewAction.RefreshingError(it))
+                                        LRPartialChange.RefreshError(it)
+                                    }
+                                    .startWith(LRPartialChange.RefreshStarted())
+                                    .cancelOn(Observable.merge(reloadIntent, retryIntent), LRPartialChange.RefreshCancelled())
+                        }
+        )
+    }
 
     @CallSuper
     override fun stateReducer(vs: VS, change: PartialChange): VS {

@@ -36,6 +36,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
     }
 
     var useDiffUtils = true
+    val diffUtilsDetectMoves = true
 
     data class AdapterList<out M : IdentifiableLong>(
             val modelList: List<M>,
@@ -62,7 +63,7 @@ abstract class BaseRecyclerViewAdapter<M : IdentifiableLong> : RecyclerView.Adap
                     override fun getNewListSize() = field.size
                     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition].id == field[newItemPosition].id
                     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = old[oldItemPosition] == field[newItemPosition]
-                }).dispatchUpdatesTo(this)
+                }, diffUtilsDetectMoves).dispatchUpdatesTo(this)
             } else {
                 notifyDataSetChanged()
             }
