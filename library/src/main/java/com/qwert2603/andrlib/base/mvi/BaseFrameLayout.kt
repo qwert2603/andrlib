@@ -9,12 +9,12 @@ import android.support.annotation.CallSuper
 import android.util.AttributeSet
 import com.hannesdorfmann.mosby3.mvi.layout.MviFrameLayout
 import com.qwert2603.andrlib.util.LogUtils
-import com.qwert2603.andrlib.util.Quad
-import com.qwert2603.andrlib.util.Quint
+import com.qwert2603.andrlib.util.StateHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>> : MviFrameLayout<V, P>, BaseView<VS> {
+abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, VS>>
+    : MviFrameLayout<V, P>, BaseView<VS>, StateHolder<VS> {
 
     constructor(context: Context) : super(context)
 
@@ -27,9 +27,9 @@ abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, 
 
     private var everRendered = false
 
-    protected var prevViewState: VS? = null
+    override var prevViewState: VS? = null
 
-    protected lateinit var currentViewState: VS
+    override lateinit var currentViewState: VS
 
     private val viewDisposable = CompositeDisposable()
 
@@ -65,76 +65,5 @@ abstract class BaseFrameLayout<VS : Any, V : BaseView<VS>, P : BasePresenter<V, 
         everRendered = false
         prevViewState = null
         render(currentViewState)
-    }
-
-    protected inline fun <T> renderIfChanged(crossinline field: VS.() -> T, crossinline renderer: (T) -> Unit) {
-        val prevViewState = prevViewState
-        val currentField = field(currentViewState)
-        if (prevViewState == null || currentField !== field(prevViewState)) {
-            renderer(currentField)
-        }
-    }
-
-    protected inline fun <T, U> renderIfChangedTwo(crossinline fields: VS.() -> Pair<T, U>, crossinline renderer: (Pair<T, U>) -> Unit) {
-        val prevViewState = prevViewState
-        val currentField = fields(currentViewState)
-        if (prevViewState == null) {
-            renderer(currentField)
-            return
-        }
-        val prevField = fields(prevViewState)
-        if (currentField.first !== prevField.first || currentField.second !== prevField.second) {
-            renderer(currentField)
-        }
-    }
-
-    protected inline fun <T, U, V> renderIfChangedThree(crossinline fields: VS.() -> Triple<T, U, V>, crossinline renderer: (Triple<T, U, V>) -> Unit) {
-        val prevViewState = prevViewState
-        val currentField = fields(currentViewState)
-        if (prevViewState == null) {
-            renderer(currentField)
-            return
-        }
-        val prevField = fields(prevViewState)
-        if (currentField.first !== prevField.first || currentField.second !== prevField.second || currentField.third !== prevField.third) {
-            renderer(currentField)
-        }
-    }
-
-    protected inline fun <T, U, V, W> renderIfChangedFour(crossinline fields: VS.() -> Quad<T, U, V, W>, crossinline renderer: (Quad<T, U, V, W>) -> Unit) {
-        val prevViewState = prevViewState
-        val currentField = fields(currentViewState)
-        if (prevViewState == null) {
-            renderer(currentField)
-            return
-        }
-        val prevField = fields(prevViewState)
-        if (currentField.first !== prevField.first || currentField.second !== prevField.second
-                || currentField.third !== prevField.third || currentField.forth !== prevField.forth) {
-            renderer(currentField)
-        }
-    }
-
-    protected inline fun <T, U, V, W, X> renderIfChangedFive(crossinline fields: VS.() -> Quint<T, U, V, W, X>, crossinline renderer: (Quint<T, U, V, W, X>) -> Unit) {
-        val prevViewState = prevViewState
-        val currentField = fields(currentViewState)
-        if (prevViewState == null) {
-            renderer(currentField)
-            return
-        }
-        val prevField = fields(prevViewState)
-        if (currentField.first !== prevField.first || currentField.second !== prevField.second
-                || currentField.third !== prevField.third || currentField.forth !== prevField.forth
-                || currentField.fifth !== prevField.fifth) {
-            renderer(currentField)
-        }
-    }
-
-    protected inline fun <T> renderIfChangedWithFirstRendering(crossinline field: VS.() -> T, crossinline renderer: (T, isFirstRendering: Boolean) -> Unit) {
-        val prevViewState = prevViewState
-        val currentField = field(currentViewState)
-        if (prevViewState == null || currentField !== field(prevViewState)) {
-            renderer(currentField, prevViewState == null)
-        }
     }
 }
