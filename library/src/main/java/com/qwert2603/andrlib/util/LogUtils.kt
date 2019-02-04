@@ -60,7 +60,7 @@ object LogUtils {
         if (t != null && !errorsFilter(t)) {
             val stringWriter = StringWriter()
             t.printStackTrace(PrintWriter(stringWriter))
-            d(tag, "msg ${t.message}\n" + stringWriter.toString())
+            d(tag, "$msg ${t.message}\n" + stringWriter.toString())
             return
         }
         when (logType) {
