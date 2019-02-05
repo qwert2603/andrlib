@@ -64,7 +64,7 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
     /** [additionalKey] additional key that can be used for loading initial model. */
     @Suppress("UNCHECKED_CAST")
     protected fun loadRefreshPartialChanges(additionalKey: Observable<A> = Observable.just(Any() as A)): Observable<PartialChange> {
-        val additionalKeyShared = additionalKey.shareAfterViewSubscribed()
+        val additionalKeyShared = additionalKey//.shareAfterViewSubscribed()
         return Observable.merge(
                 Observable
                         .merge(
