@@ -63,41 +63,39 @@ abstract class LRPresenter<A, I, VS : LRViewState, V : LRView<VS>>(uiSchedulerPr
 
     /** [additionalKey] additional key that can be used for loading initial model. */
     @Suppress("UNCHECKED_CAST")
-    protected fun loadRefreshPartialChanges(additionalKey: Observable<A> = Observable.just(Any() as A)): Observable<PartialChange> {
-        val additionalKeyShared = additionalKey//.shareAfterViewSubscribed()
-        return Observable.merge(
-                Observable
-                        .merge(
-                                Observable.combineLatest(
-                                        loadIntent,
-                                        reloadIntent.startWith(Any()),
-                                        BiFunction { k, _ -> k }
-                                ),
-                                retryIntent
-                        )
-                        .withLatestFrom(additionalKeyShared, BiFunction { _: Any, a: A -> a })
-                        .switchMap { a ->
-                            initialModelSingle(a)
-                                    .toObservable()
-                                    .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
-                                    .onErrorReturn { LRPartialChange.LoadingError(it) }
-                                    .startWith(LRPartialChange.LoadingStarted())
-                        },
-                refreshIntent
-                        .withLatestFrom(additionalKeyShared, BiFunction { _: Any, a: A -> a })
-                        .switchMap { a ->
-                            initialModelSingleRefresh(a)
-                                    .toObservable()
-                                    .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
-                                    .onErrorReturn {
-                                        viewActions.onNext(LRViewAction.RefreshingError(it))
-                                        LRPartialChange.RefreshError(it)
-                                    }
-                                    .startWith(LRPartialChange.RefreshStarted())
-                                    .cancelOn(Observable.merge(reloadIntent, retryIntent), LRPartialChange.RefreshCancelled())
-                        }
-        )
-    }
+    protected fun loadRefreshPartialChanges(additionalKey: Observable<A> = Observable.just(Any() as A)): Observable<PartialChange> =
+            Observable.merge(
+                    Observable
+                            .merge(
+                                    Observable.combineLatest(
+                                            loadIntent,
+                                            reloadIntent.startWith(Any()),
+                                            BiFunction { k, _ -> k }
+                                    ),
+                                    retryIntent
+                            )
+                            .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
+                            .switchMap { a ->
+                                initialModelSingle(a)
+                                        .toObservable()
+                                        .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
+                                        .onErrorReturn { LRPartialChange.LoadingError(it) }
+                                        .startWith(LRPartialChange.LoadingStarted())
+                            },
+                    refreshIntent
+                            .withLatestFrom(additionalKey, BiFunction { _: Any, a: A -> a })
+                            .switchMap { a ->
+                                initialModelSingleRefresh(a)
+                                        .toObservable()
+                                        .map<LRPartialChange> { LRPartialChange.InitialModelLoaded(it) }
+                                        .onErrorReturn {
+                                            viewActions.onNext(LRViewAction.RefreshingError(it))
+                                            LRPartialChange.RefreshError(it)
+                                        }
+                                        .startWith(LRPartialChange.RefreshStarted())
+                                        .cancelOn(Observable.merge(reloadIntent, retryIntent), LRPartialChange.RefreshCancelled())
+                            }
+            )
 
     @CallSuper
     override fun stateReducer(vs: VS, change: PartialChange): VS {
