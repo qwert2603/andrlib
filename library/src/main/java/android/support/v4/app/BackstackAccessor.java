@@ -40,13 +40,12 @@ public class BackstackAccessor {
      * stack)
      */
     public static boolean isFragmentOnBackStack(Fragment fragment) {
-        return false;
         // CHANGED !!!!
-//        try {
-//            return fragment.isInBackStack();
-//        } catch (IllegalAccessError | NoSuchMethodError e) {
-//            return isInBackStackAndroidX(fragment);
-//        }
+        try {
+            return fragment.isInBackStack();
+        } catch (IllegalAccessError | NoSuchMethodError e) {
+            return isInBackStackAndroidX(fragment);
+        }
     }
 
     /**
