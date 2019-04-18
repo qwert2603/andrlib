@@ -23,6 +23,7 @@ object LogUtils {
     var errorsFilter: (Throwable) -> Boolean = { true }
 
     var onErrorLogged: ((tag: String, msg: String, t: Throwable?) -> Unit)? = null
+    var onDebugLogged: ((tag: String, msg: String) -> Unit)? = null
 
     fun d(msg: () -> String) {
         d(APP_TAG, msg)
@@ -31,9 +32,9 @@ object LogUtils {
     fun d(tag: String, msg: () -> String) {
         when (logType) {
             LogUtils.LogType.NONE -> Unit
-            LogUtils.LogType.ANDROID -> Log.d(tag, msg())
+            LogUtils.LogType.ANDROID -> d(tag, msg())
             LogUtils.LogType.ANDROID_ERRORS -> Unit
-            LogUtils.LogType.SOUT -> println("$tag ${msg()}")
+            LogUtils.LogType.SOUT -> d(tag, msg())
             LogUtils.LogType.SOUT_ERRORS -> Unit
         }
     }
@@ -50,6 +51,7 @@ object LogUtils {
             LogUtils.LogType.SOUT -> println("$tag $msg")
             LogUtils.LogType.SOUT_ERRORS -> Unit
         }
+        onDebugLogged?.invoke(tag, msg)
     }
 
     fun e(msg: String = ERROR_MSG, t: Throwable? = null) {
